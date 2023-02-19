@@ -5,7 +5,6 @@
 #include<cstdlib>
 
 using namespace std;
-int count=0;
 
 char score2grade(int score){
     if(score >= 80) return 'A';
@@ -21,7 +20,7 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(string filename,vector<string> name,vector<int> scores,vector<char> grade){
+void importDataFromFile(string filename,vector<string> &name,vector<int> &scores,vector<char> &grade){
   
     ifstream file;
     file.open(filename.c_str());
@@ -34,8 +33,8 @@ void importDataFromFile(string filename,vector<string> name,vector<int> scores,v
     name.push_back(S_name);
     scores.push_back(score[0]+score[1]+score[2]);
     grade.push_back(score2grade(score[0]+score[1]+score[2]));
-    count++;
     }
+    file.close();
 }
 
 void getCommand(string &command,string &key){
@@ -43,39 +42,39 @@ void getCommand(string &command,string &key){
     cout <<"Please input your command: ";
     getline(cin,text);
  
-    char format[]="%s %s";
+    char format[]="%s %[^\n]\n";
     char ss[50],bb[1000];
     sscanf(text.c_str(),format,&ss,&bb);
     command = ss;
     key = bb;    
-    
 }
 
-void searchName(vector<string> names,vector<int> scores,vector<char> grade,string key){
-    unsigned int check=1;
-    cout << names.size();
-    for(unsigned int i=0;i<count;i++){
-        string key_check=toUpperStr(names[i]);
-        cout << key_check <<" ";
-        if(key==key_check){
-            cout << "ssssss";
-           // printf("%s's score = %d\n",names[i].c_str(),scores[i]); 
-          //  printf("%s's grade = %c\n",names[i].c_str(),grade[i]);
+void searchName(vector<string> name,vector<int> scores,vector<char> grade,string key){
+    unsigned int check=0;
+    cout<<"---------------------------------\n";
+    for(unsigned int i=0;i<scores.size();i++){
+        string keycheck=name.at(i);
+        keycheck=toUpperStr(keycheck);
+        if(key==keycheck){
+           printf("%s's score = %d\n",name[i].c_str(),scores[i]); 
+           printf("%s's grade = %c\n",name[i].c_str(),grade[i]);
         }else{
             check++;
         }
     }
 
     if(check == scores.size()){
-        cout<<"---------------------------------\n" << "Cannot found.\n" <<"---------------------------------\n";
+        cout << "Cannot found.\n";
     }
+    cout<<"---------------------------------\n";
 }
 
 void searchGrade(vector<string> names,vector<int> scores,vector<char> grade,string key){
  unsigned int check=0;
+ cout<<"---------------------------------\n";
     for(unsigned int i=0;i<scores.size();i++){
-        string key_check=toUpperStr(names[i]);
-        if(key == key_check){
+        char keyy=key[0];
+        if(keyy == grade[i]){
          printf("%s (%d)\n",names[i].c_str(),scores[i]);
         }else{
             check++;
@@ -83,8 +82,9 @@ void searchGrade(vector<string> names,vector<int> scores,vector<char> grade,stri
     }
 
     if(check == scores.size()){
-        cout<<"---------------------------------\n" << "Cannot found.\n" <<"---------------------------------\n";
+        cout<<"Cannot found.\n";
     }
+    cout<<"---------------------------------\n";
 }
 
 
